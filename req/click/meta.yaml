@@ -1,0 +1,42 @@
+{% set name = "click" %}
+{% set version = "6.7" %}
+{% set file_ext = "tar.gz" %}
+{% set hash_type = "sha256" %}
+{% set hash_value = "f15516df478d5a56180fbf80e68f206010e6d160fc39fa508b65e035fd75130b" %}
+
+package:
+  name: '{{ name|lower }}'
+  version: '{{ version }}'
+
+source:
+  fn: '{{ name }}-{{ version }}.{{ file_ext }}'
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.{{ file_ext }}
+  '{{ hash_type }}': '{{ hash_value }}'
+
+build:
+  number: 0
+  script: python setup.py install --single-version-externally-managed --record=record.txt
+
+requirements:
+  host:
+    - python
+    - setuptools
+  run:
+    - python
+
+test:
+  imports:
+    - click
+
+about:
+  home: http://github.com/mitsuhiko/click
+  license: BSD License
+  license_family: BSD
+  license_file: ''
+  summary: A simple wrapper around optparse for powerful command line utilities.
+  description: ''
+  doc_url: ''
+  dev_url: ''
+
+extra:
+  recipe-maintainers: ''

@@ -1,0 +1,9 @@
+
+{% set ver="1.2.3" %}
+
+package:
+  name: abc
+  version: {{ ver }}
+source:
+  url: http://w/abc-{{ ver }}.tgz
+

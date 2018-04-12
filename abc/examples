@@ -1,0 +1,10 @@
+
+package:
+  name: abc
+  version: 1.2.3
+
+source:
+	# url: https://github.com/conda/conda-build/archive/3.8.0.tar.gz
+        # sha256: (sha256 sum) 
+	git-url: ../
+	path: ../

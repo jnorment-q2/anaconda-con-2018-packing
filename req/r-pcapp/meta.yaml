@@ -1,0 +1,82 @@
+{% set version = '1.9-73' %}
+
+{% set posix = 'm2-' if win else '' %}
+{% set native = 'm2w64-' if win else '' %}
+
+package:
+  name: r-pcapp
+  version: {{ version|replace("-", "_") }}
+
+source:
+  fn: pcaPP_1.9-73.tar.gz
+  url:
+    - {{ cran_mirror }}/src/contrib/pcaPP_1.9-73.tar.gz
+    - {{ cran_mirror }}/src/contrib/Archive/pcaPP/pcaPP_1.9-73.tar.gz
+  sha256: ca4566b0babfbe83ef9418283b08a12b3420dc362f93c6562f265df7926b53fc
+
+build:
+  merge_build_host: True  # [win]
+  # If this is a new build for the same version, increment the build number.
+  number: 0
+
+  # This is required to make R link correctly on Linux.
+  rpaths:
+    - lib/R/lib/
+    - lib/
+
+requirements:
+  build:
+    - {{ compiler('c') }}          # [not win]
+    - {{ compiler('cxx') }}        # [not win]
+    - {{native}}toolchain          # [win]
+    - {{posix}}filesystem          # [win]
+    - {{posix}}make
+
+  host:
+    - r-base
+    - r-mvtnorm
+
+  run:
+    - r-base
+    - {{native}}gcc-libs           # [win]
+    - r-mvtnorm
+
+test:
+  commands:
+    # You can put additional test commands to be run here.
+    - $R -e "library('pcaPP')"           # [not win]
+    - "\"%R%\" -e \"library('pcaPP')\""  # [win]
+
+  # You can also put a file called run_test.py, run_test.sh, or run_test.bat
+  # in the recipe that will be run at test time.
+
+  # requires:
+    # Put any additional test requirements here.
+
+about:
+  home: https://CRAN.R-project.org/package=pcaPP
+  license: GPL (>= 3)
+  summary: Provides functions for robust PCA by projection pursuit. The methods are described
+    in Croux et al. (2006) <doi:10.2139/ssrn.968376>, Croux et al. (2013) <doi:10.1080/00401706.2012.727746>,
+    Todorov and Filzmoser (2013) <doi:10.1007/978-3-642-33042-1_31>.
+  license_family: GPL3
+
+# The original CRAN metadata for this package was:
+
+# Package: pcaPP
+# Version: 1.9-73
+# Date: 2018-01-04
+# Title: Robust PCA by Projection Pursuit
+# Author: Peter Filzmoser, Heinrich Fritz, Klaudius Kalcher
+# Maintainer: Valentin Todorov <valentin.todorov@chello.at>
+# Imports: mvtnorm
+# Description: Provides functions for robust PCA by projection pursuit. The methods are described in Croux et al. (2006) <doi:10.2139/ssrn.968376>, Croux et al. (2013) <doi:10.1080/00401706.2012.727746>, Todorov and Filzmoser (2013) <doi:10.1007/978-3-642-33042-1_31>.
+# License: GPL (>= 3)
+# NeedsCompilation: yes
+# Repository: CRAN
+# Packaged: 2018-01-05 06:39:02 UTC; TodorovV
+# Date/Publication: 2018-01-14 18:27:29 UTC
+
+# See
+# http://docs.continuum.io/conda/build.html for
+# more information about meta.yaml

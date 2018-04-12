@@ -1,0 +1,81 @@
+{% set version = '1.0-7' %}
+
+{% set posix = 'm2-' if win else '' %}
+{% set native = 'm2w64-' if win else '' %}
+
+package:
+  name: r-mvtnorm
+  version: {{ version|replace("-", "_") }}
+
+source:
+  fn: mvtnorm_1.0-7.tar.gz
+  url:
+    - {{ cran_mirror }}/src/contrib/mvtnorm_1.0-7.tar.gz
+    - {{ cran_mirror }}/src/contrib/Archive/mvtnorm/mvtnorm_1.0-7.tar.gz
+  sha256: d063b0dec57c2f588da4ac35fcd479dc2ab83cb473e4a6fee6cbb6e7a9fbf038
+
+build:
+  merge_build_host: True  # [win]
+  # If this is a new build for the same version, increment the build number.
+  number: 0
+
+  # This is required to make R link correctly on Linux.
+  rpaths:
+    - lib/R/lib/
+    - lib/
+
+requirements:
+  build:
+    - {{ compiler('c') }}          # [not win]
+    - {{ compiler('fortran') }}    # [not win]
+    - {{native}}toolchain          # [win]
+    - {{posix}}filesystem          # [win]
+    - {{posix}}make
+
+  host:
+    - r-base
+
+  run:
+    - r-base
+    - {{native}}gcc-libs           # [win]
+
+test:
+  commands:
+    # You can put additional test commands to be run here.
+    - $R -e "library('mvtnorm')"           # [not win]
+    - "\"%R%\" -e \"library('mvtnorm')\""  # [win]
+
+  # You can also put a file called run_test.py, run_test.sh, or run_test.bat
+  # in the recipe that will be run at test time.
+
+  # requires:
+    # Put any additional test requirements here.
+
+about:
+  home: http://mvtnorm.R-forge.R-project.org
+  license: GPL-2
+  summary: Computes multivariate normal and t probabilities, quantiles, random deviates and densities.
+  license_family: GPL2
+
+# The original CRAN metadata for this package was:
+
+# Package: mvtnorm
+# Title: Multivariate Normal and t Distributions
+# Version: 1.0-7
+# Date: 2019-01-25
+# Authors@R: c(person("Alan", "Genz", role = "aut"), person("Frank", "Bretz", role = "aut"), person("Tetsuhisa", "Miwa", role = "aut"), person("Xuefei", "Mi", role = "aut"), person("Friedrich", "Leisch", role = "ctb"), person("Fabian", "Scheipl", role = "ctb"), person("Bjoern", "Bornkamp", role = "ctb"), person("Martin", "Maechler", role = "ctb"), person("Torsten", "Hothorn", role = c("aut", "cre"), email = "Torsten.Hothorn@R-project.org", comment = c(ORCID = "0000-0001-8301-0471")))
+# Description: Computes multivariate normal and t probabilities, quantiles, random deviates and densities.
+# Imports: stats, methods
+# Depends: R(>= 1.9.0)
+# License: GPL-2
+# URL: http://mvtnorm.R-forge.R-project.org
+# NeedsCompilation: yes
+# Packaged: 2018-01-25 15:15:27 UTC; hothorn
+# Author: Alan Genz [aut], Frank Bretz [aut], Tetsuhisa Miwa [aut], Xuefei Mi [aut], Friedrich Leisch [ctb], Fabian Scheipl [ctb], Bjoern Bornkamp [ctb], Martin Maechler [ctb], Torsten Hothorn [aut, cre] (<https://orcid.org/0000-0001-8301-0471>)
+# Maintainer: Torsten Hothorn <Torsten.Hothorn@R-project.org>
+# Repository: CRAN
+# Date/Publication: 2018-01-26 00:17:08
+
+# See
+# http://docs.continuum.io/conda/build.html for
+# more information about meta.yaml

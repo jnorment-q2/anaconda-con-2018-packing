@@ -1,0 +1,10 @@
+
+package:
+  name: abc
+  version: 1.2.3
+requirements:
+  build:
+    - python {{ python }}
+  run:
+    - python {{ python }}
+

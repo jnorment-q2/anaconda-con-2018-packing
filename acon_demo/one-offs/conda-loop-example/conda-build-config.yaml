@@ -1,0 +1,6 @@
+
+conda_build_config.yaml:
+skipvar:
+        - True
+	- False
+

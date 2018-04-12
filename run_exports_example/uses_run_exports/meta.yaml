@@ -1,0 +1,10 @@
+
+package:
+  name: uses_run_exports
+  version: 1.0
+
+requirements:
+  build:
+  # run_exports:
+  - {{ pin_subpackage('has_run_exports') }}
+
